@@ -1,30 +1,39 @@
+html, body{
+    height: 100%;
+}
+
 body{
     font-family: 'MedievalSharp', cursive;    
 }
 
-.container{
+header, footer{
     background-color: whitesmoke;
     border: 1px solid lightslategray;
-    max-width: 700px;
-    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
 }
 
-.panel-vertical-left{
-    background-color: whitesmoke;
-    border: 1px solid lightslategray;
-    float: left;
+footer{
+    position: fixed;
+    bottom: 0;
     width: 100%;
-    max-width: 200px;
-    margin-right: 10px;
 }
 
-.panel-vertical-right{
+.content{
+    display: flex;
+    width: 100%;
+}
+
+.container, .panel-vertical-left, .panel-vertical-right{
     background-color: whitesmoke;
     border: 1px solid lightslategray;
-    float: right;
-    width: 100%;
+    padding: 10px;
+    flex: auto;
+}
+
+.panel-vertical-left, .panel-vertical-right{
     max-width: 200px;
-    margin-left: 10px;
+    height: 100%;
 }
 
 .container-header{
