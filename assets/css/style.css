@@ -43,3 +43,11 @@ footer{
 .containter-body{
     padding: 10px;
 }
+
+.characters-starting{
+    text-align: justify;
+}
+
+.character {
+    display: inline-block;
+}
