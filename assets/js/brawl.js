@@ -24,7 +24,6 @@ $(document).ready(function(){
     var rogue = new character(60, 10, 25);
     var paladin = new character(60, 10, 25);
 
-    //Global Variable for easy access
     var player;
     var defender;
 
@@ -35,7 +34,7 @@ $(document).ready(function(){
     $('#paladin').data(paladin);
 
     console.log("Fighter Health: " + $('#fighter').data("health"));
-
+    console.log($('#fighter'));
     // Assign event functionality to elements
 
     // First State
@@ -44,22 +43,22 @@ $(document).ready(function(){
     // Other characters go right become enemies
     // New click functionality added for second phase
     $('.character').on("click", function () {
-        console.log("Button Clicked");
-
+        console.log("Selected: ", $(this));
+        player = $(this);
+        console.log(player);
         // To all character divs not clicked
-        $('.character').not(this).each(function(){
-            console.log("Not selected: ", this);
-            // Move right
-            $(this).remove().appendTo("#characters-enemy");
-            // Advance to Stage Two
-            SelectDefender();
-        });
+        // $('.character').not(this).each(function(){
+        //     console.log("Not selected: ", this);
+        //     // Move right
+        //     $(this).remove().appendTo("#characters-enemy");
+        //     // Advance to Stage Two
+        //     SelectDefender();
+        // });
 
         // To clicked div
-        console.log("Selected: ", this);
+        
         // Move left
         $(this).remove().appendTo('#characters-player');
-        player = $(this).data()
     });
 
     // Repeated functionality
@@ -79,7 +78,6 @@ $(document).ready(function(){
             $('.character').on("click", function () {
                 RemoveListeners();
                 $(this).appendTo("#characters-defender");
-                defender = $(this).data();
                 $(this).on("click", Attack);
             });
         });
@@ -102,12 +100,14 @@ $(document).ready(function(){
         // Click buttons to first stage
 
     function Attack() {
+        var player = $('#characters-player > .character');
+        var defender = $('#characters-defender > .character');
         //var playerHealth = player.data("health");
-        //var defenderHealth = defender.data("health");
+        var defenderHealth = defender.data("health");
 
-        console.log("The Player is a: " + player);
-        console.log("The Defender is a: " + defender);
+        console.log(player);
+        console.log(defender);
         //console.log("Player Health: " + playerHealth);
-        //console.log("Defender Health: " + defenderHealth);
+        console.log("Defender Health: " + defenderHealth);
     }
 });
