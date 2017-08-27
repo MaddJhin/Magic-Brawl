@@ -1,4 +1,4 @@
-$(document).ready(function(){
+
     // Define Variables
 
     // Object constructor for multiple characters
@@ -27,6 +27,8 @@ $(document).ready(function(){
     var player;
     var defender;
 
+$(document).ready(function(){
+
     // Assign Character Data to Character Classes
     $('#fighter').data(fighter);
     $('#mage').data(mage);
@@ -44,21 +46,23 @@ $(document).ready(function(){
     // New click functionality added for second phase
     $('.character').on("click", function () {
         console.log("Selected: ", $(this));
-        player = $(this);
-        console.log(player);
+
         // To all character divs not clicked
-        // $('.character').not(this).each(function(){
-        //     console.log("Not selected: ", this);
-        //     // Move right
-        //     $(this).remove().appendTo("#characters-enemy");
-        //     // Advance to Stage Two
-        //     SelectDefender();
-        // });
+        $('.character').not(this).each(function(){
+            console.log("Not selected: ", this);
+            // Move right
+            $(this).remove().appendTo("#characters-enemy");
+            // Advance to Stage Two
+        });
 
         // To clicked div
-        
+        player = $(this);
+        console.log(player);
+
         // Move left
         $(this).remove().appendTo('#characters-player');
+
+        SelectDefender();
     });
 
     // Repeated functionality
@@ -75,8 +79,10 @@ $(document).ready(function(){
     // Buttons to attack appear
     function SelectDefender() {
         $('#characters-enemy > .character').each(function(){
-            $('.character').on("click", function () {
+            $(this).on("click", function () {
+                defender = $(this);
                 RemoveListeners();
+                console.log("The Defender is: " + defender)
                 $(this).appendTo("#characters-defender");
                 $(this).on("click", Attack);
             });
@@ -100,14 +106,8 @@ $(document).ready(function(){
         // Click buttons to first stage
 
     function Attack() {
-        var player = $('#characters-player > .character');
-        var defender = $('#characters-defender > .character');
-        //var playerHealth = player.data("health");
-        var defenderHealth = defender.data("health");
-
         console.log(player);
         console.log(defender);
-        //console.log("Player Health: " + playerHealth);
-        console.log("Defender Health: " + defenderHealth);
+
     }
 });
