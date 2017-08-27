@@ -24,8 +24,15 @@ $(document).ready(function(){
     var rogue = new character(60, 10, 25);
     var paladin = new character(60, 10, 25);
 
+    //Global Variable for easy access
+    var player;
+    var defender;
+
     // Assign Character Data to Character Classes
     $('#fighter').data(fighter);
+    $('#mage').data(mage);
+    $('#rogue').data(rogue);
+    $('#paladin').data(paladin);
 
     console.log("Fighter Health: " + $('#fighter').data("health"));
 
@@ -52,6 +59,7 @@ $(document).ready(function(){
         console.log("Selected: ", this);
         // Move left
         $(this).remove().appendTo('#characters-player');
+        player = $(this).data()
     });
 
     // Repeated functionality
@@ -62,19 +70,21 @@ $(document).ready(function(){
         })
     }
 
+    // Second Stage
+    // Clicking on an enemy brings him to the middle
+    // Sets attack and counter attack values
+    // Buttons to attack appear
     function SelectDefender() {
         $('#characters-enemy > .character').each(function(){
             $('.character').on("click", function () {
                 RemoveListeners();
                 $(this).appendTo("#characters-defender");
+                defender = $(this).data();
+                $(this).on("click", Attack);
             });
         });
     }
 
-    // Second Stage
-    // Clicking on an enemy brings him to the middle
-    // Sets attack and counter attack values
-    // Buttons to attack appear
 
     // Third Stage
     // Clicking Attack Button Damages player and enemy
@@ -90,4 +100,14 @@ $(document).ready(function(){
         // Attack and Health Values to Original
         // All Characters In middle
         // Click buttons to first stage
+
+    function Attack() {
+        //var playerHealth = player.data("health");
+        //var defenderHealth = defender.data("health");
+
+        console.log("The Player is a: " + player);
+        console.log("The Defender is a: " + defender);
+        //console.log("Player Health: " + playerHealth);
+        //console.log("Defender Health: " + defenderHealth);
+    }
 });
