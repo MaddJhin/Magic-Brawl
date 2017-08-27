@@ -51,3 +51,7 @@ footer{
 .character {
     display: inline-block;
 }
+
+#characters-defender {
+    text-align: center;
+}

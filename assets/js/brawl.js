@@ -1,10 +1,19 @@
 // Define Variables
 
 // Object constructor for multiple characters
-function character(hp, ap, ca){
+function character(hp, att, def){
     this.health = hp;
-    this.attackPower = ap;
-    this.counterAttack = ca;
+    this.baseAttack = att;
+    this.currentAttack = att;
+    this.defense = def;
+}
+
+character.prototype.increaseAttack = function(){
+    this.currentAttack += baseAttack;
+}
+
+character.prototype.takeDamage = function(damage){
+    this.health -= damage;
 }
 
 // Make new characters with values
@@ -14,6 +23,12 @@ var mage = new character(60, 10, 25);
 var rogue = new character(60, 10, 25);
 var paladin = new character(60, 10, 25);
 
+// Assign Character Data to Character Classes
+//$('#fighter').data('person', fighter);
+
+
+console.log("Fighter Health: " + $('#fighter').health);
+
 // Assign event functionality to elements
 
 // First State
@@ -21,7 +36,6 @@ var paladin = new character(60, 10, 25);
 // Character clicked goes left becomes player character
 // Other characters go right become enemies
 // New click functionality added for second phase
-
 $('.character').on("click", function () {
     console.log("Button Clicked");
 
@@ -29,18 +43,33 @@ $('.character').on("click", function () {
     $('.character').not(this).each(function(){
         console.log("Not selected: ", this);
         // Move right
-
-        // Change on click event
-
+        $(this).remove().appendTo("#characters-enemy");
+        // Advance to Stage Two
+        SelectDefender();
     });
 
     // To clicked div
     console.log("Selected: ", this);
     // Move left
-
-    // Change on click event
-
+    $(this).remove().appendTo('#characters-player');
 });
+
+// Repeated functionality
+// Remove all event listeners from character buttons
+function RemoveListeners() {
+    $('.character').each(function(){
+        $(this).off("click");
+    })
+}
+
+function SelectDefender() {
+    $('#characters-enemy > .character').each(function(){
+        $('.character').on("click", function () {
+            RemoveListeners();
+            $(this).appendTo("#characters-defender");
+        });
+    });
+}
 
 // Second Stage
 // Clicking on an enemy brings him to the middle
