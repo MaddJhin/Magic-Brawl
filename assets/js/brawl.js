@@ -44,21 +44,15 @@ $(document).ready(function(){
     var player;
     var defender;
 
+    var originalState = $('.content').clone(true);
+
     // Assign Character Data to Character Classes
     $('#fighter').data(fighter);
     $('#mage').data(mage);
     $('#rogue').data(rogue);
     $('#paladin').data(paladin);
 
-    // Assign event functionality to elements
-
-    // First State
-    // Click any starting character
-    // Character clicked goes left becomes player character
-    // Other characters go right become enemies
-    // New click functionality added for second phase
     UpdateStats();
-
     StartGame();
 
     function StartGame(){
@@ -95,7 +89,6 @@ $(document).ready(function(){
         });
     }
 
-    // Repeated functionality
     // Remove all event listeners from character buttons
     function RemoveListeners() {
         $('.character').each(function(){
@@ -206,6 +199,7 @@ $(document).ready(function(){
 
     function GameReset() {
         console.log("Game has Reset!");
+        $('.content').replaceWith(originalState.clone());
         $('#alert-window').css("display","none");
         $('.character').each(function(){
             var character = $(this).data();
