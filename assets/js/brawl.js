@@ -1,4 +1,4 @@
-
+$(document).ready(function(){
     // Define Variables
 
     // Object constructor for multiple characters
@@ -9,13 +9,14 @@
         this.defense = def;
     }
 
+    function takeDamage(damage){
+        this.health -= damage;
+    }
     character.prototype.increaseAttack = function(){
         this.currentAttack += baseAttack;
     }
 
-    character.prototype.takeDamage = function(damage){
-        this.health -= damage;
-    }
+    character.prototype.takeDamage = takeDamage();
 
     // Make new characters with values
     // Balancing is done here
@@ -27,16 +28,12 @@
     var player;
     var defender;
 
-$(document).ready(function(){
-
     // Assign Character Data to Character Classes
     $('#fighter').data(fighter);
     $('#mage').data(mage);
     $('#rogue').data(rogue);
     $('#paladin').data(paladin);
 
-    console.log("Fighter Health: " + $('#fighter').data("health"));
-    console.log($('#fighter'));
     // Assign event functionality to elements
 
     // First State
@@ -45,22 +42,19 @@ $(document).ready(function(){
     // Other characters go right become enemies
     // New click functionality added for second phase
     $('.character').on("click", function () {
-        console.log("Selected: ", $(this));
-
-        // To all character divs not clicked
-        $('.character').not(this).each(function(){
-            console.log("Not selected: ", this);
-            // Move right
-            $(this).remove().appendTo("#characters-enemy");
-            // Advance to Stage Two
-        });
 
         // To clicked div
         player = $(this);
         console.log(player);
-
+        console.log("Player health", player.data("health"));
         // Move left
         $(this).remove().appendTo('#characters-player');
+
+        // To all character divs not clicked
+        $('.character').not(this).each(function(){
+            // Move right
+            $(this).remove().appendTo("#characters-enemy");
+        });
 
         SelectDefender();
     });
@@ -78,14 +72,13 @@ $(document).ready(function(){
     // Sets attack and counter attack values
     // Buttons to attack appear
     function SelectDefender() {
-        $('#characters-enemy > .character').each(function(){
-            $(this).on("click", function () {
-                defender = $(this);
-                RemoveListeners();
-                console.log("The Defender is: " + defender)
-                $(this).appendTo("#characters-defender");
-                $(this).on("click", Attack);
-            });
+        $('#characters-enemy > .character').on("click", function () {
+
+            $(this).remove().appendTo("#characters-defender");
+            // To clicked div
+            defender = $(this);
+            console.log(defender);
+            console.log("Defender health", defender.data("health"));
         });
     }
 
@@ -108,6 +101,9 @@ $(document).ready(function(){
     function Attack() {
         console.log(player);
         console.log(defender);
-
+        console.log(player.data());
+        
+        // player.takeDamage(defender.data("defense")));
+        // console.log('Player health', player.data("health"));
     }
 });
