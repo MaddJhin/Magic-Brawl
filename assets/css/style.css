@@ -30,8 +30,8 @@ img{
 }
 
 .container, .panel-vertical-left, .panel-vertical-right{
-    background-color: whitesmoke;
-    border: 1px solid lightslategray;
+    /* background-color: whitesmoke; */
+    /* border: 1px solid lightslategray; */
     padding: 10px;
     flex: auto;
 }
@@ -90,7 +90,6 @@ img{
     margin-top: -150px;
     margin-left: -50px;
     background-color: whitesmoke;
-    opacity: 0;
 }
 
 .alert-header{

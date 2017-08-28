@@ -64,6 +64,7 @@ $(document).ready(function(){
     function StartGame(){
         $('#bttn-phys').hide();
         $('#bttn-magic').hide();
+        $('#alert-window').css("display","none");
 
         $('.character').on("click", function () {
             RemoveListeners();
@@ -188,7 +189,8 @@ $(document).ready(function(){
     function GameOver(playerWin) {
         console.log("Game Over!!!!!")
         
-        $('#alert-window').hide();
+        $('#alert-window').css("display", "block");
+        $('.alert-body').find('*').not('#bttn-reset').remove();
         if(playerWin == true){
             $('.alert-body').prepend('<p>Player Won!!!</p>');
         }
@@ -204,7 +206,7 @@ $(document).ready(function(){
 
     function GameReset() {
         console.log("Game has Reset!");
-        $('#alert-window').show();
+        $('#alert-window').css("display","none");
         $('.character').each(function(){
             var character = $(this).data();
             character.reset();
