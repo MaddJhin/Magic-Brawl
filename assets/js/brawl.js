@@ -6,14 +6,17 @@ $(document).ready(function(){
         this.health = hp;
         this.baseAttack = att;
         this.currentAttack = att;
-        this.defense = def;
-        this.takeDamage = function (damage){
-            this.health -= damage;
-            console.log("Damage Taken", damage);
-        }
+        this.defense = def; 
+    }
+    
+    character.prototype.takeDamage = function (damage){
+        this.health -= damage;
+        console.log("Damage Taken", damage);
     }
 
-    // character.prototype.increaseAttack = takeDamage();
+    character.prototype.increaseAttack = function(){
+        this.currentAttack += this.baseAttack;
+    };
 
     // character.prototype.takeDamage = takeDamage();
 
@@ -101,11 +104,25 @@ $(document).ready(function(){
         // Click buttons to first stage
 
     function Attack() {
-        console.log("Player Health", player.health);
-        console.log("Defender Health", defender.health);
-        // player.takeDamage(defender.data("defense")));
-        // console.log('Player health', player.data("health"));
         defender.takeDamage(player.currentAttack);
-        console.log("Player Health", player.health);
+        player.increaseAttack();
+        console.log("Defender Health", defender.health);
+
+        if(defender.health > 0){
+            player.takeDamage(defender.defense);
+            console.log("Player Health", player.health);            
+        }
+        else {
+            $('#characters-defender > .character').remove();
+            SelectDefender();
+        }
+        
+        if(player.health < 0){
+            GameOver();
+        }
+    }
+
+    function GameOver() {
+        console.log("Game Over!!!!!")
     }
 });
