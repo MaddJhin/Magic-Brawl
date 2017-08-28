@@ -44,8 +44,6 @@ $(document).ready(function(){
     var player;
     var defender;
 
-    var originalState = $('.content').clone(true);
-
     // Assign Character Data to Character Classes
     $('#fighter').data(fighter);
     $('#mage').data(mage);
@@ -76,7 +74,8 @@ $(document).ready(function(){
                 // Move right
                 $(this).appendTo("#characters-enemy");
             });
-    
+
+            var originalState = $('.content').clone(true);
             SelectDefender();
         });
     
@@ -199,13 +198,13 @@ $(document).ready(function(){
 
     function GameReset() {
         console.log("Game has Reset!");
-        $('.content').replaceWith(originalState.clone());
         $('#alert-window').css("display","none");
         $('.character').each(function(){
             var character = $(this).data();
             character.reset();
         });
 
+        $('.content').replaceWith(originalState.clone());
         StartGame();
     }
 });
