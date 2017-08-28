@@ -8,7 +8,7 @@ $(document).ready(function(){
         this.currentAttack = att;
         this.defense = def; 
     }
-    
+
     character.prototype.takeDamage = function (damage){
         this.health -= damage;
         console.log("Damage Taken", damage);
@@ -22,10 +22,10 @@ $(document).ready(function(){
 
     // Make new characters with values
     // Balancing is done here
-    var fighter = new character(60, 10, 15);
-    var mage = new character(60, 10, 25);
-    var rogue = new character(60, 10, 25);
-    var paladin = new character(60, 10, 25);
+    var fighter = new character(40, 20, 15);
+    var mage = new character(60, 30, 25);
+    var rogue = new character(30, 50, 10);
+    var paladin = new character(100, 10, 30);
 
     var player;
     var defender;
@@ -43,6 +43,8 @@ $(document).ready(function(){
     // Character clicked goes left becomes player character
     // Other characters go right become enemies
     // New click functionality added for second phase
+    UpdateStats();
+
     $('.character').on("click", function () {
         RemoveListeners();
 
@@ -76,15 +78,22 @@ $(document).ready(function(){
     // Sets attack and counter attack values
     // Buttons to attack appear
     function SelectDefender() {
-        $('#characters-enemy > .character').each(function(){
-            $(this).on("click", function () {
-                RemoveListeners();
-                defender = $(this).data();
-                console.log("The Defender", defender)
-                $(this).appendTo("#characters-defender");
-                $(this).on("click", Attack);
+        if($('#characters-enemy').find('.character').length == 0)
+        {
+            GameOver(true);
+        }
+        else
+        {
+            $('#characters-enemy > .character').each(function(){
+                $(this).on("click", function () {
+                    RemoveListeners();
+                    defender = $(this).data();
+                    console.log("The Defender", defender)
+                    $(this).appendTo("#characters-defender");
+                    $(this).on("click", Attack);
+                });
             });
-        });
+        }
     }
 
 
@@ -117,12 +126,42 @@ $(document).ready(function(){
             SelectDefender();
         }
         
-        if(player.health < 0){
-            GameOver();
+        if(player.health <= 0){
+            GameOver(false);
         }
+
+        UpdateStats();
+
     }
 
-    function GameOver() {
+    function UpdateStats() {
+        $('.character').each(function(){
+            console.log("Updating Stats", this);
+            var character = $(this).data();
+            $(this).find('.character-health').text("HP: " + character.health);
+            $(this).find('.character-attack').text("Attack: " + character.currentAttack);
+            $(this).find('.character-defense').text("Defense: " + character.defense);
+        });
+    }
+
+    function GameOver(playerWin) {
         console.log("Game Over!!!!!")
+        
+        $('#alert-window').css("opacity", 1);
+        if(playerWin == true){
+            $('.alert-body').prepend('<p>Player Won!!!</p>');
+        }
+        else{
+            $('.alert-body').prepend('<p>Player Lost!!!</p>');
+        }
+        RemoveListeners();
+
+        $('#bttn-reset').on("click",function(){
+            GameReset();
+        });
+    }
+
+    function GameReset() {
+        console.log("Game has Reset!");
     }
 });

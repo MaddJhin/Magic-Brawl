@@ -31,8 +31,9 @@ footer{
     flex: auto;
 }
 
-.panel-vertical-left, .panel-vertical-right{
-    max-width: 200px;
+.panel-vertical-left, .panel-vertical-right{ 
+    min-width: 200px;
+    max-width: 300px;
     height: 100%;
 }
 
@@ -44,14 +45,50 @@ footer{
     padding: 10px;
 }
 
-.characters-starting{
-    text-align: justify;
-}
-
 .character {
     display: inline-block;
+    margin: 20px;
+}
+
+.alert{
+    position: fixed;
+    border: 3px solid black;
+    width: 300px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -50px;
+    background-color: whitesmoke;
+    opacity: 0;
+}
+
+.alert-header{
+    text-align: center;
+    color: white;
+    background-color: gray;
+    padding: 10px;
+}
+
+.alert-body{
+    padding: 20px;
+    text-align: center;
+}
+
+#bttn-reset{
+    margin: 15px 0 0;
+    background-color: #555555;
+    color: white;
+    border: none;
+    text-decoration: none;
+    padding: 5px;
+}
+
+#characters-starting, #characters-enemy, #characters-player{
+    text-align: center;
 }
 
 #characters-defender {
     text-align: center;
 }
+
