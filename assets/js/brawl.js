@@ -2,11 +2,15 @@ $(document).ready(function(){
     // Define Variables
 
     // Object constructor for multiple characters
-    function character(hp, att, def){
+    function character(hp, att, maAtt, def, maD){
+        this.startingHealth = hp;
         this.health = hp;
         this.baseAttack = att;
+        this.baseMagic = maAtt;
         this.currentAttack = att;
+        this.currentMagic = maAtt;
         this.defense = def; 
+        this.magicDefense = maD;
     }
 
     character.prototype.takeDamage = function (damage){
@@ -18,14 +22,24 @@ $(document).ready(function(){
         this.currentAttack += this.baseAttack;
     };
 
+    character.prototype.increaseMagic = function(){
+        this.currentMagic += this.baseMagic;
+    };
+
+    character.prototype.reset = function(){
+        this.currentMagic = this.baseMagic;
+        this.currentAttack = this.baseAttack;
+        this.health = this.startingHealth;
+    };
+
     // character.prototype.takeDamage = takeDamage();
 
     // Make new characters with values
     // Balancing is done here
-    var fighter = new character(40, 20, 15);
-    var mage = new character(60, 30, 25);
-    var rogue = new character(30, 50, 10);
-    var paladin = new character(100, 10, 30);
+    var fighter = new character(40, 20, 0, 25, 5);
+    var mage = new character(60, 5, 25, 10, 40);
+    var rogue = new character(30, 50, 10, 15, 10);
+    var paladin = new character(100, 10, 15, 30, 30);
 
     var player;
     var defender;
@@ -45,25 +59,40 @@ $(document).ready(function(){
     // New click functionality added for second phase
     UpdateStats();
 
-    $('.character').on("click", function () {
-        RemoveListeners();
+    StartGame();
 
-        // To clicked div
-        player = $(this).data();
-        console.log(player);
-        console.log("Player health", player.health);
-        
-        // Move left
-        $(this).appendTo('#characters-player');
+    function StartGame(){
+        $('#bttn-phys').hide();
+        $('#bttn-magic').hide();
 
-        // To all character divs not clicked
-        $('.character').not(this).each(function(){
-            // Move right
-            $(this).appendTo("#characters-enemy");
+        $('.character').on("click", function () {
+            RemoveListeners();
+    
+            // To clicked div
+            player = $(this).data();
+            console.log(player);
+            console.log("Player health", player.health);
+            
+            // Move left
+            $(this).appendTo('#characters-player');
+    
+            // To all character divs not clicked
+            $('.character').not(this).each(function(){
+                // Move right
+                $(this).appendTo("#characters-enemy");
+            });
+    
+            SelectDefender();
         });
-
-        SelectDefender();
-    });
+    
+        $('#bttn-phys').on("click", function () {
+            Attack("physical");
+        });
+        
+        $('#bttn-magic').on("click", function () {
+            Attack("magic");
+        });
+    }
 
     // Repeated functionality
     // Remove all event listeners from character buttons
@@ -89,8 +118,10 @@ $(document).ready(function(){
                     RemoveListeners();
                     defender = $(this).data();
                     console.log("The Defender", defender)
-                    $(this).appendTo("#characters-defender");
+                    $(this).prependTo("#characters-defender");
                     $(this).on("click", Attack);
+                    $('#bttn-phys').show();
+                    $('#bttn-magic').show();
                 });
             });
         }
@@ -112,9 +143,16 @@ $(document).ready(function(){
         // All Characters In middle
         // Click buttons to first stage
 
-    function Attack() {
-        defender.takeDamage(player.currentAttack);
-        player.increaseAttack();
+    function Attack(type) {
+
+        if(type == "physical"){
+            defender.takeDamage(player.currentAttack);
+            player.increaseAttack();    
+        }
+        else if(type == "magic"){
+            defender.takeDamage(player.currentMagic);
+            player.increaseMagic();
+        }
         console.log("Defender Health", defender.health);
 
         if(defender.health > 0){
@@ -123,6 +161,8 @@ $(document).ready(function(){
         }
         else {
             $('#characters-defender > .character').remove();
+            $('#bttn-phys').hide();
+            $('#bttn-magic').hide();
             SelectDefender();
         }
         
@@ -131,23 +171,24 @@ $(document).ready(function(){
         }
 
         UpdateStats();
-
     }
 
     function UpdateStats() {
         $('.character').each(function(){
             console.log("Updating Stats", this);
             var character = $(this).data();
-            $(this).find('.character-health').text("HP: " + character.health);
-            $(this).find('.character-attack').text("Attack: " + character.currentAttack);
-            $(this).find('.character-defense').text("Defense: " + character.defense);
+            $(this).find('.character-health').text("Health: " + character.health);
+            $(this).find('.character-attack').text("Attk: " + character.currentAttack);
+            $(this).find('.character-defense').text("Def: " + character.defense);
+            $(this).find('.character-magic-attack').text("MAttk: " + character.currentMagic);
+            $(this).find('.character-magic-defense').text("MDef: " + character.magicDefense);
         });
     }
 
     function GameOver(playerWin) {
         console.log("Game Over!!!!!")
         
-        $('#alert-window').css("opacity", 1);
+        $('#alert-window').hide();
         if(playerWin == true){
             $('.alert-body').prepend('<p>Player Won!!!</p>');
         }
@@ -163,5 +204,12 @@ $(document).ready(function(){
 
     function GameReset() {
         console.log("Game has Reset!");
+        $('#alert-window').show();
+        $('.character').each(function(){
+            var character = $(this).data();
+            character.reset();
+        });
+
+        StartGame();
     }
 });
